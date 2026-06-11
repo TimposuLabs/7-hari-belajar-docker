@@ -47,6 +47,7 @@ docker --version
 ├── hari-2/
 │   ├── README.md
 │   └── docker-node-app/
+│   └── docker-spring-app/
 │
 ├── hari-3/
 │   ├── README.md
