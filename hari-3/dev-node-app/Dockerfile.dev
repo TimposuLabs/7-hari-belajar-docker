@@ -1,0 +1,14 @@
+FROM node:18-alpine
+ 
+WORKDIR /app
+ 
+# Install dependencies
+# Catatan: kode tidak di-COPY karena akan di-bind mount
+COPY package.json package-lock.json* ./
+RUN npm install
+ 
+# Port development
+EXPOSE 3000
+ 
+# Gunakan nodemon untuk auto-reload
+CMD ["npm", "run", "dev"]
