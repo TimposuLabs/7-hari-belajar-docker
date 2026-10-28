@@ -11,7 +11,7 @@ Docker Engine, `curl`, `jq` (opsional). Build pertama mengunduh dependency Maven
 ## Struktur
 ```text
 spring-mysql-app/
-├── pom.xml                         Spring Boot 3.5.6, Java 17
+├── pom.xml                         Spring Boot 3.5.16, Java 17
 ├── src/main/resources/application.properties   konfigurasi dari environment variable
 ├── src/main/java/com/belajardocker/
 │   ├── SpringMysqlAppApplication.java   entry point + data awal
@@ -25,6 +25,7 @@ spring-mysql-app/
 ```
 
 ## Cara kerja
+- `pom.xml` menimpa `tomcat.version` dan `jackson-bom.version` (versi yang dikelola Spring Boot) untuk menambal CVE yang sudah punya perbaikan. Pada pemindaian Trivy 28-10-2026 masih tersisa 2 temuan HIGH yang sudah ada perbaikannya hanya di versi mayor (`spring-webmvc` 7.x); itu tidak diambil agar tetap sesuai Spring Boot 3.5.x.
 - `application.properties` memakai `${DB_HOST}`, `${DB_NAME}`, `${DB_USER}`, `${DB_PASSWORD}`. Tidak ada password default.
 - `hikari.initialization-fail-timeout=120000` membuat aplikasi menunggu sampai 120 detik sampai MySQL siap, sehingga tidak perlu `sleep 30`.
 - `ddl-auto=update` membuat tabel otomatis (cukup untuk belajar; produksi sebaiknya memakai migrasi).

@@ -4,7 +4,9 @@ WORKDIR /app
 ENV PYTHONUNBUFFERED=1 PORT=5000
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# pip dibuang setelah dependency terpasang: tidak dibutuhkan saat runtime
+RUN pip install --no-cache-dir -r requirements.txt \
+ && pip uninstall -y pip setuptools wheel
 
 COPY app.py gunicorn.conf.py ./
 

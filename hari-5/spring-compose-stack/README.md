@@ -15,7 +15,7 @@ Docker Engine + `docker compose`, `curl`, `jq` (opsional). Build pertama mengund
 spring-compose-stack/
 ├── docker-compose.yml
 ├── .env.example
-└── api/ (pom.xml, Dockerfile, src/…)    Spring Boot 3.5.6, Java 17
+└── api/ (pom.xml, Dockerfile, src/…)    Spring Boot 3.5.16, Java 17
 ```
 
 ## Menjalankan (dari direktori `hari-5/spring-compose-stack`)

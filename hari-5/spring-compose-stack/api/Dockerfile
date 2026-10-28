@@ -16,7 +16,7 @@ WORKDIR /app
 COPY --from=builder /build/target/*.jar app.jar
 
 # Jalankan sebagai user biasa, bukan root
-RUN addgroup -S spring && adduser -S spring -G spring
+RUN apk upgrade --no-cache && addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 
 ENV PORT=8080

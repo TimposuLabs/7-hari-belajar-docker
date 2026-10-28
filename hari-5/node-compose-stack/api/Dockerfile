@@ -11,6 +11,9 @@ ENV NODE_ENV=production PORT=3000
 COPY --from=deps /app/node_modules ./node_modules
 COPY package.json ./
 COPY src/ ./src/
+# npm tidak dibutuhkan saat runtime; membuangnya mengurangi permukaan serangan
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
+
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=15s --timeout=5s --retries=3 --start-period=30s \
