@@ -1,0 +1,72 @@
+# Stack Spring Boot: Spring Boot API + MySQL + Adminer (UI database)
+# Jalankan dari direktori yang berisi file ini:  docker compose up -d --build
+
+name: spring-compose-stack
+
+services:
+
+  api:
+    build: ./api
+    image: spring-compose-api:1.0.0
+    ports:
+      - "127.0.0.1:${API_PORT:-8080}:8080"
+    environment:
+      DB_HOST: mysql                        # nama service MySQL
+      DB_PORT: "3306"
+      DB_NAME: ${MYSQL_DATABASE:?isi MYSQL_DATABASE di .env}
+      DB_USER: ${MYSQL_USER:?isi MYSQL_USER di .env}
+      DB_PASSWORD: ${MYSQL_PASSWORD:?isi MYSQL_PASSWORD di .env}
+    networks:
+      - backend-net
+      - frontend-net            # perlu untuk published port
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?isi MYSQL_ROOT_PASSWORD di .env}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?isi MYSQL_DATABASE di .env}
+      MYSQL_USER: ${MYSQL_USER:?isi MYSQL_USER di .env}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?isi MYSQL_PASSWORD di .env}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - backend-net
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  # Adminer: UI web untuk melihat isi database. Hanya untuk development.
+  adminer:
+    image: adminer:5
+    ports:
+      - "127.0.0.1:${ADMINER_PORT:-8081}:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+    networks:
+      - frontend-net
+      - backend-net
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+networks:
+  frontend-net:
+  backend-net:
+
+volumes:
+  mysql-data:

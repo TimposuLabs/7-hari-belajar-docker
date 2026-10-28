@@ -1,0 +1,94 @@
+# Stack produksi: API + PostgreSQL. Image diambil dari registry (tidak di-build di sini).
+# Variabel (dari .env atau shell): IMAGE_REPO, IMAGE_TAG, POSTGRES_DB, POSTGRES_USER, APP_PORT
+# Jalankan lewat skrip:  ./scripts/deploy.sh 1.0.0
+
+name: production-app
+
+services:
+  app:
+    image: ${IMAGE_REPO:-timposulabs/production-app}:${IMAGE_TAG:?isi IMAGE_TAG, mis. 1.0.0}
+    ports:
+      - "127.0.0.1:${APP_PORT:-3000}:3000"     # reverse proxy di host (Nginx/Caddy) meneruskan ke sini
+    environment:
+      NODE_ENV: production
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: ${POSTGRES_DB:?isi POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER:?isi POSTGRES_USER}
+      DB_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    networks:
+      - edge-net       # punya akses keluar + published port
+      - data-net       # terhubung ke database
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    init: true
+    pids_limit: 200
+    mem_limit: 256m
+    cpus: 0.5
+    stop_grace_period: 15s
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "5" }
+
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?isi POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:?isi POSTGRES_USER}
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    volumes:
+      - pg-prod-data:/var/lib/postgresql/data
+    networks:
+      - data-net       # internal: tidak bisa diakses dari luar maupun keluar
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    cap_drop:
+      - ALL
+    cap_add:           # minimum yang dibutuhkan image postgres untuk start
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+networks:
+  edge-net:
+  data-net:
+    internal: true
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+
+volumes:
+  pg-prod-data:

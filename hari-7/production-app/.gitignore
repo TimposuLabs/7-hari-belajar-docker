@@ -1,0 +1,6 @@
+.env
+secrets/*
+!secrets/db_password.txt.example
+backups/
+.deployed_tag
+.previous_tag

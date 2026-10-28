@@ -1,0 +1,35 @@
+# Konfigurasi hardened untuk secure-node-app.
+# Jalankan dari direktori ini:  docker compose up -d --build
+
+name: secure-node-app
+
+services:
+  app:
+    build: .
+    image: secure-node-app:1.0.0
+    ports:
+      - "127.0.0.1:${HTTP_PORT:-3000}:3000"   # hanya dari komputer ini
+    environment:
+      NODE_ENV: production
+      APP_SECRET_FILE: /run/secrets/app_secret   # path file, BUKAN nilai secret
+    secrets:
+      - app_secret
+    read_only: true                # filesystem root hanya-baca
+    tmpfs:
+      - /tmp                       # satu-satunya tempat menulis (di memori)
+    cap_drop:
+      - ALL                        # buang semua Linux capabilities
+    security_opt:
+      - no-new-privileges:true     # blokir kenaikan hak akses (setuid)
+    init: true                     # tini sebagai PID 1: sinyal & proses zombie ditangani
+    pids_limit: 100                # batasi jumlah proses
+    mem_limit: 128m
+    cpus: 0.5
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+secrets:
+  app_secret:
+    file: ./secrets/app_secret.txt   # berkas ini di-.gitignore

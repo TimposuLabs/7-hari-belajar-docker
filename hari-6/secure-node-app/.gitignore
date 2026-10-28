@@ -1,0 +1,4 @@
+# Berkas secret TIDAK PERNAH di-commit
+secrets/*
+!secrets/app_secret.txt.example
+.env

@@ -1,118 +1,92 @@
 # 🐳 7 Hari Belajar Docker
 
-Selamat datang di repository **7 Hari Belajar Docker**. Repository ini berisi contoh source code untuk mempelajari Docker dari dasar hingga mampu membangun dan menjalankan aplikasi menggunakan container, yang berasal dari EBook **7 Hari Belajar Docker**.
+Repository ini berisi **source code** untuk eBook **7 Hari Belajar Docker**: contoh aplikasi, Dockerfile, dan konfigurasi Docker Compose untuk belajar Docker dari dasar sampai deployment.
 
----
+- 📖 Naskah buku: <https://github.com/TopekoX/buku-7-hari-docker>
+- 🐳 Image Docker: <https://hub.docker.com/u/timposulabs>
 
-## 🎯 Tujuan Pembelajaran
+## 👥 Untuk siapa
 
-Setelah menyelesaikan materi selama 7 hari, peserta diharapkan mampu:
+Pemula yang ingin belajar Docker secara bertahap, dengan contoh Node.js, Python (Flask), dan Java (Spring Boot). Semua penjelasan README dalam Bahasa Indonesia.
 
-- Memahami konsep Container dan Docker.
-- Memahami perbedaan Virtual Machine dan Container.
-- Mengelola Docker Image dan Container.
-- Menggunakan Docker Volume dan Network.
-- Membuat Dockerfile untuk aplikasi.
-- Menggunakan Docker Compose.
-- Membangun dan menjalankan aplikasi berbasis container.
+## 🗺️ Peta belajar
 
----
+| Hari | Topik | Bab buku | Direktori | Image Docker Hub |
+|---|---|---|---|---|
+| 1 | Image & container dasar | `02_day_1_...` | (hanya perintah CLI, tanpa source code) | — |
+| 2 | Dockerfile | `03_day_2_...` | [`hari-2/`](hari-2) | `docker-node-app`, `docker-python-app`, `docker-spring-app` (tag `1.0`) |
+| 3 | Volume & data | `04_day_3_...` | [`hari-3/`](hari-3) | — |
+| 4 | Networking | `05_day_4_...` | [`hari-4/`](hari-4/README.md) | `node-postgres-app`, `flask-redis-app`, `spring-mysql-app` (tag `1.0.0`) |
+| 5 | Docker Compose | `06_day_5_...` | [`hari-5/`](hari-5/README.md) | — (stack dibuild dari source) |
+| 6 | Keamanan container | `07_day_6_...` | [`hari-6/`](hari-6/README.md) | — (dibuild dari source) |
+| 7 | Deploy ke production | `08_day_7_...` | [`hari-7/`](hari-7/README.md) | `production-app` (tag `1.0.0`) |
 
-## 📋 Prasyarat
+Semua image berada di namespace `timposulabs` (mis. `timposulabs/node-postgres-app:1.0.0`).
 
-Sebelum memulai, pastikan telah menginstal:
-
-- Docker Desktop atau Docker Engine
-- Git
-- Visual Studio Code (Opsional)
-- Terminal / Command Prompt
-
-Cek instalasi Docker:
-
-```bash
-docker --version
-```
-
----
-
-## 📁 Struktur Repository
+## 📁 Struktur
 
 ```text
 7-hari-belajar-docker/
-│
-├── hari-1/
-│   ├── README.md
-│   └── latihan/
-│
-├── hari-2/
-│   ├── README.md
-│   └── docker-node-app/
-│   └── docker-spring-app/
-│
-├── hari-3/
-│   ├── README.md
-│   └── latihan/
-│
-├── hari-4/
-│   ├── README.md
-│   └── latihan/
-│
-├── hari-5/
-│   ├── README.md
-│   └── latihan/
-│
-├── hari-6/
-│   ├── README.md
-│   └── latihan/
-│
-├── hari-7/
-│   ├── materi.md
-│   ├── mini-project/
-│   └── deployment/
-│
+├── hari-2/   docker-node-app, docker-python-app, docker-spring-app
+├── hari-3/   dev-*-app, node/python/spring-volume-demo
+├── hari-4/   network-basics, node-postgres-app, flask-redis-app, spring-mysql-app,
+│             multi-container-app, lb-demo
+├── hari-5/   node-compose-stack, python-compose-stack, spring-compose-stack, lb-demo
+├── hari-6/   secure-node-app
+├── hari-7/   production-app
+├── AUDIT_REPORT.md            audit naskah dan rencana
+├── IMPLEMENTATION_REPORT.md   apa yang dibuat dan diuji
 └── README.md
 ```
 
----
+Setiap proyek Hari 4-7 memiliki README sendiri berisi tujuan, prasyarat, langkah, hasil yang diharapkan, verifikasi, kesalahan umum, dan cara membersihkan.
 
-## 🚀 Menjalankan Repository
+## 📋 Prasyarat
 
-Clone repository:
-
-```bash
-git clone https://github.com/username/7-hari-belajar-docker.git
-```
-
-Masuk ke folder project:
+- **Docker Engine** di Linux (diuji pada Docker Engine 29). Docker Desktop juga bisa, tetapi tidak diasumsikan.
+- **Docker Compose v2** (plugin): cek dengan `docker compose version`. Perintah lama `docker-compose` tidak dipakai.
+- `git`, `curl`. Opsional: `jq` (merapikan JSON), `openssl` (membuat password acak).
+- Koneksi internet untuk mengunduh image dasar dan dependency.
 
 ```bash
-cd 7-hari-belajar-docker
+docker version
+docker compose version
 ```
 
-Pilih materi yang ingin dipelajari:
+## 🚀 Cara menjalankan
 
 ```bash
-cd hari-1
+git clone https://github.com/TimposuLabs/7-hari-belajar-docker.git
+cd 7-hari-belajar-docker/hari-5/node-compose-stack      # contoh: pilih proyek
+cat README.md                                           # baca langkahnya
+cp .env.example .env                                    # isi password milikmu
+docker compose up -d --build
 ```
 
----
+Kebanyakan proyek memerlukan file `.env` yang dibuat dari `.env.example`. **Jangan commit file `.env`** (sudah di-`.gitignore`).
+
+## 🔒 Catatan keamanan
+
+- Tidak ada password di source code; semua dari `.env` atau file secret (yang di-`.gitignore`).
+- Port aplikasi dipublikasikan ke `127.0.0.1` saja, tidak ke seluruh jaringan.
+- Database tidak dipublikasikan ke host; hanya bisa dicapai dari network Docker.
+- Image Hari 4-7 berjalan sebagai user non-root.
+- Contoh di Hari 6/7 memakai `read_only`, `cap_drop: ALL`, dan `no-new-privileges`.
+- Tidak ada contoh yang memakai container `--privileged` atau membuka Docker daemon lewat TCP.
+- Password di `.env.example` sengaja berupa placeholder (`GANTI_...`); ganti sebelum dipakai.
+
+## ⚠️ Catatan tentang Hari 2-3
+
+Direktori `hari-2/` dan `hari-3/` adalah implementasi asli penulis dan tidak diubah pada pembaruan Hari 4-7.
+Satu hal yang perlu diketahui: `hari-3/node-volume-demo/Dockerfile` memakai `npm ci` yang membutuhkan `package-lock.json`, sedangkan file itu tidak ada di Git (ter-ignore oleh `.gitignore` lama). Jika `docker build` gagal dengan `"/package-lock.json": not found`, jalankan `npm install --package-lock-only` di folder tersebut. Detail ada di `AUDIT_REPORT.md`.
 
 ## 🤝 Kontribusi
 
-Kontribusi sangat terbuka untuk:
-
-- Perbaikan materi
-- Penambahan latihan
-- Penambahan studi kasus
-- Perbaikan dokumentasi
-
-Silakan buat Pull Request atau Issue.
-
----
+Perbaikan materi, latihan, dan dokumentasi sangat terbuka melalui Issue atau Pull Request.
 
 ## 📄 Lisensi
 
-Project ini dibuat untuk tujuan pembelajaran dan dapat digunakan secara bebas untuk kebutuhan edukasi.
+Proyek ini dibuat untuk tujuan pembelajaran dan dapat digunakan secara bebas untuk kebutuhan edukasi.
 
 ---
 
