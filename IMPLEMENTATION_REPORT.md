@@ -133,3 +133,9 @@ Namespace: `timposulabs` — <https://hub.docker.com/u/timposulabs>. Repository 
 - Day 6: Dockerfile Node/Python/Spring, JSON logging (Node/Python/Spring), graceful shutdown, dan LB produksi diuji. Bug yang ditemukan: `node --init` tidak ada, `${VAR}` tidak diperluas pada `ENTRYPOINT` bentuk exec, `req.path` pada logger, klaim resolusi DNS Nginx pada `upstream`.
 - Day 5: `reservations.cpus` tidak diterapkan; klaim DNS round-robin Nginx dikoreksi.
 - Catatan lengkap: `hasil_audit.md` bagian 8 (di direktori kerja naskah). Perubahan bab Day 1–7 belum di-commit di repo naskah.
+
+## 11. Pembaruan 2026-10-30 (penyelesaian sisa; belum di-push)
+
+- `hari-3/node-volume-demo` dan `hari-3/python-volume-demo`: retry koneksi database (alur bab gagal tanpa ini). Image Docker Hub `node-volume-demo:1.0` dan `python-volume-demo:1.0` **belum** diperbarui (menunggu izin push).
+- Dijalankan literal dan lolos: alur Day 3 Node/Python/Spring (termasuk demo `DDL_AUTO`), contoh volume awal Day 3, Day 1, Compose production-ready Day 6, integrasi logger Flask.
+- Lihat `hasil_audit.md` bagian 9 di direktori kerja naskah.
