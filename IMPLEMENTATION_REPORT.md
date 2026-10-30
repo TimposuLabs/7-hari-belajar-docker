@@ -126,3 +126,10 @@ Namespace: `timposulabs` — <https://hub.docker.com/u/timposulabs>. Repository 
 - Enam image dipublikasikan di Docker Hub (tag `1.0`, amd64): `docker-node-app`, `docker-python-app`, `docker-spring-app` (menimpa tag lama), `node-volume-demo`, `python-volume-demo`, `spring-volume-demo` (baru). Diverifikasi lewat API Hub, pull dari nol, dan menjalankan salah satunya.
 - Pengujian: build, jalan, CRUD, dan persistensi semua image Day 2–3: **PASS**; Trivy: 0 secret; temuan sisa dicatat di `hasil_audit.md` (di luar repo ini, di direktori kerja naskah).
 - Bagian "Day 2–3" pada laporan awal ("tidak diubah") sudah tidak berlaku.
+
+## 10. Pembaruan 2026-10-30 (lanjutan): Day 5/6 diuji, pendahuluan/penutup/cheat sheet diaudit
+
+- Source baru: `hari-5/override-demo` (base/override/prod, batas resource) dan `hari-6/lb-production` (Nginx rate limiting, header keamanan, `read_only`, scaling + `nginx -s reload`). Commit `563a0f1`, di-push.
+- Day 6: Dockerfile Node/Python/Spring, JSON logging (Node/Python/Spring), graceful shutdown, dan LB produksi diuji. Bug yang ditemukan: `node --init` tidak ada, `${VAR}` tidak diperluas pada `ENTRYPOINT` bentuk exec, `req.path` pada logger, klaim resolusi DNS Nginx pada `upstream`.
+- Day 5: `reservations.cpus` tidak diterapkan; klaim DNS round-robin Nginx dikoreksi.
+- Catatan lengkap: `hasil_audit.md` bagian 8 (di direktori kerja naskah). Perubahan bab Day 1–7 belum di-commit di repo naskah.
