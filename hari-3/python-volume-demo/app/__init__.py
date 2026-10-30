@@ -1,5 +1,7 @@
 import os
+import time
 from flask import Flask, jsonify
+from sqlalchemy.exc import OperationalError
 from .models import db
  
  
@@ -26,9 +28,19 @@ def create_app():
             'db':      os.environ.get('DB_HOST'),
         })
  
+    # PostgreSQL butuh beberapa detik sebelum siap: coba lagi daripada langsung crash
     with app.app_context():
-        db.create_all()
-        _seed()
+        for attempt in range(1, 16):
+            try:
+                db.create_all()
+                _seed()
+                break
+            except OperationalError as err:
+                db.session.rollback()
+                print(f'[DB] Belum siap (percobaan {attempt}/15): {err.orig}', flush=True)
+                time.sleep(2)
+        else:
+            raise RuntimeError('Database tidak dapat dihubungi')
  
     return app
  

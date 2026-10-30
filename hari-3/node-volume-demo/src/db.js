@@ -10,8 +10,23 @@ const pool = new Pool({
   connectionTimeoutMillis: 10000,
 });
  
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// PostgreSQL butuh beberapa detik sebelum siap. Coba lagi daripada langsung crash.
+async function connectWithRetry(attempts = 15, delayMs = 2000) {
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      return await pool.connect();
+    } catch (err) {
+      console.log(`[DB] Belum siap (percobaan ${i}/${attempts}): ${err.message}`);
+      await sleep(delayMs);
+    }
+  }
+  throw new Error('Database tidak dapat dihubungi');
+}
+
 async function initDB() {
-  const client = await pool.connect();
+  const client = await connectWithRetry();
   try {
     await client.query(`
       CREATE TABLE IF NOT EXISTS products (
