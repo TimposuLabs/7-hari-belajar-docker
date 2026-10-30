@@ -1,0 +1,17 @@
+# DEVELOPMENT: otomatis digabung dengan docker-compose.yml saat menjalankan `docker compose up -d`
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev        # gunakan Dockerfile dev
+    ports:
+      - "127.0.0.1:3000:3000"           # API dapat diakses langsung tanpa Nginx
+      - "127.0.0.1:9229:9229"           # port debugger Node.js
+    volumes:
+      - ./api/src:/app/src              # bind mount: kode di host langsung terbaca container
+    environment:
+      NODE_ENV: development
+    command: ["node", "--inspect=0.0.0.0:9229", "src/server.js"]
+  postgres:
+    ports:
+      - "127.0.0.1:5432:5432"           # database dapat dibuka dari tool GUI di komputermu

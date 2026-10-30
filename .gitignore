@@ -140,3 +140,6 @@ docker-compose.override.yml
 #################################################
 
 !hari-[2-7]/**/package-lock.json
+
+# Contoh override teruji di hari-5/override-demo harus ikut di-commit
+!hari-5/override-demo/docker-compose.override.yml

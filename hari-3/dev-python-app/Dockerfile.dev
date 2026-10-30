@@ -9,7 +9,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000
  
 # Flask development server dengan debug mode (auto-reload aktif)
-ENV FLASK_ENV=development \
-    FLASK_DEBUG=1
+ENV FLASK_DEBUG=1
  
 CMD ["python", "app.py"]
