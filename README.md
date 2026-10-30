@@ -14,8 +14,8 @@ Pemula yang ingin belajar Docker secara bertahap, dengan contoh Node.js, Python 
 | Hari | Topik | Bab buku | Direktori | Image Docker Hub |
 |---|---|---|---|---|
 | 1 | Image & container dasar | `02_day_1_...` | (hanya perintah CLI, tanpa source code) | — |
-| 2 | Dockerfile | `03_day_2_...` | [`hari-2/`](hari-2) | `docker-node-app`, `docker-python-app`, `docker-spring-app` (tag `1.0`) |
-| 3 | Volume & data | `04_day_3_...` | [`hari-3/`](hari-3) | — |
+| 2 | Dockerfile | `03_day_2_...` | [`hari-2/`](hari-2/README.md) | `docker-node-app`, `docker-python-app`, `docker-spring-app` (tag `1.0`) |
+| 3 | Volume & data | `04_day_3_...` | [`hari-3/`](hari-3/README.md) | `node-volume-demo`, `python-volume-demo`, `spring-volume-demo` (tag `1.0`) |
 | 4 | Networking | `05_day_4_...` | [`hari-4/`](hari-4/README.md) | `node-postgres-app`, `flask-redis-app`, `spring-mysql-app` (tag `1.0.0`) |
 | 5 | Docker Compose | `06_day_5_...` | [`hari-5/`](hari-5/README.md) | — (stack dibuild dari source) |
 | 6 | Keamanan container | `07_day_6_...` | [`hari-6/`](hari-6/README.md) | — (dibuild dari source) |
@@ -77,8 +77,7 @@ Kebanyakan proyek memerlukan file `.env` yang dibuat dari `.env.example`. **Jang
 
 ## ⚠️ Catatan tentang Hari 2-3
 
-Direktori `hari-2/` dan `hari-3/` adalah implementasi asli penulis dan tidak diubah pada pembaruan Hari 4-7.
-Satu hal yang perlu diketahui: `hari-3/node-volume-demo/Dockerfile` memakai `npm ci` yang membutuhkan `package-lock.json`, sedangkan file itu tidak ada di Git (ter-ignore oleh `.gitignore` lama). Jika `docker build` gagal dengan `"/package-lock.json": not found`, jalankan `npm install --package-lock-only` di folder tersebut. Detail ada di `AUDIT_REPORT.md`.
+`hari-2/` dan `hari-3/` diperbarui pada 2026-10-30: versi dasar (Node 24, Python 3.13, Spring Boot 3.5.16), file `package-lock.json` ditambahkan (sebelumnya tidak ada sehingga `docker build` Node gagal), password default dihapus dari kode, driver SQLAlchemy ditulis eksplisit, dan image dibangun ulang lalu dipublikasikan. Lihat `hasil_audit.md` di repo naskah dan `IMPLEMENTATION_REPORT.md`.
 
 ## 🤝 Kontribusi
 

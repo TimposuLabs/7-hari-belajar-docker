@@ -135,8 +135,8 @@ docker-compose.override.yml
 *.bak
 *.orig
 #################################################
-# Pengecualian: lockfile proyek hari-4 s.d. hari-7 WAJIB di-commit
+# Pengecualian: lockfile proyek hari-2 s.d. hari-7 WAJIB di-commit
 # agar `npm ci` pada Dockerfile bisa berjalan dari clone bersih
 #################################################
 
-!hari-[4-7]/**/package-lock.json
+!hari-[2-7]/**/package-lock.json

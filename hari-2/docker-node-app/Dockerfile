@@ -1,8 +1,8 @@
 # =========================================================
 # TAHAP 1: Tentukan base image
-# Gunakan node versi 18 dengan alpine (ringan)
+# Gunakan node versi 24 dengan alpine (ringan)
 # =========================================================
-FROM node:18-alpine
+FROM node:24-alpine
  
 # =========================================================
 # TAHAP 2: Set metadata (opsional, tapi praktik yang baik)
@@ -17,7 +17,7 @@ WORKDIR /app
  
 # =========================================================
 # TAHAP 4: Salin file dependency TERLEBIH DAHULU
-# (manfaatkan layer cache — lihat penjelasan di 2.3)
+# (manfaatkan layer cache — lihat bagian "Memahami Build Cache dan Layer")
 # =========================================================
 COPY package.json package-lock.json ./
  

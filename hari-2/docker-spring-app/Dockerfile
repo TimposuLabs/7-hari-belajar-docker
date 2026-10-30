@@ -7,7 +7,7 @@
 # Menggunakan image yang berisi JDK + Maven untuk kompilasi
 # Image ini BESAR tapi tidak akan muncul di image final
 # ════════════════════════════════════════════════════════════════
-FROM maven:3.9.6-eclipse-temurin-17-alpine AS builder
+FROM maven:3.9-eclipse-temurin-17-alpine AS builder
  
 LABEL stage="builder"
  
@@ -58,7 +58,8 @@ COPY --from=builder /build/target/*.jar app.jar
 # ── Non-root user untuk keamanan ─────────────────────────────
 # Alpine menggunakan addgroup/adduser, berbeda dari Debian yang
 # menggunakan groupadd/useradd
-RUN addgroup -S spring && \
+RUN apk upgrade --no-cache && \
+    addgroup -S spring && \
     adduser  -S spring -G spring && \
     chown spring:spring app.jar
  

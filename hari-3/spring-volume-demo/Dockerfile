@@ -1,4 +1,4 @@
-FROM maven:3.9.6-eclipse-temurin-17-alpine AS builder
+FROM maven:3.9-eclipse-temurin-17-alpine AS builder
 WORKDIR /build
 COPY pom.xml .
 RUN mvn dependency:go-offline -q
@@ -8,7 +8,7 @@ RUN mvn clean package -DskipTests -q
 FROM eclipse-temurin:17-jre-alpine AS runtime
 WORKDIR /app
 COPY --from=builder /build/target/*.jar app.jar
-RUN addgroup -S spring && adduser -S spring -G spring && \
+RUN apk upgrade --no-cache && addgroup -S spring && adduser -S spring -G spring && \
     chown spring:spring app.jar
 USER spring:spring
 ENV PORT=8080

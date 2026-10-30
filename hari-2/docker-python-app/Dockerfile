@@ -1,5 +1,5 @@
 # Base image Python versi 3.11 varian slim (lebih kecil dari full)
-FROM python:3.11-slim
+FROM python:3.13-slim
  
 # Set direktori kerja
 WORKDIR /app

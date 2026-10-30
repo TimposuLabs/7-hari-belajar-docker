@@ -1,18 +1,19 @@
-FROM python:3.11.8-slim-bookworm AS builder
+FROM python:3.13.18-slim-bookworm AS builder
 WORKDIR /build
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential gcc libpq-dev && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt .
 RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
  
-FROM python:3.11.8-slim-bookworm AS runtime
+FROM python:3.13.18-slim-bookworm AS runtime
 WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /wheels /wheels
 COPY requirements.txt .
 RUN pip install --no-cache-dir --no-index --find-links=/wheels \
-    -r requirements.txt && rm -rf /wheels
+    -r requirements.txt && rm -rf /wheels && \
+    pip uninstall -y pip setuptools wheel
 COPY . .
 RUN groupadd --system appgroup && \
     useradd --system --gid appgroup --no-create-home appuser && \

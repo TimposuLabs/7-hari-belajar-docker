@@ -5,7 +5,7 @@ const pool = new Pool({
   port:     parseInt(process.env.DB_PORT || '5432'),
   database: process.env.DB_NAME     || 'toko',
   user:     process.env.DB_USER     || 'admin',
-  password: process.env.DB_PASSWORD || 'rahasia',
+  password: process.env.DB_PASSWORD,
   max: 10,
   connectionTimeoutMillis: 10000,
 });
