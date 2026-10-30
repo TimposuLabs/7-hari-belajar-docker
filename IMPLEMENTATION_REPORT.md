@@ -119,3 +119,10 @@ Namespace: `timposulabs` — <https://hub.docker.com/u/timposulabs>. Repository 
 3. Pemilik `hari-3`: commit `package-lock.json` untuk `hari-3/node-volume-demo` (atau hapus `package-lock.json` dari `.gitignore` lalu commit).
 4. Jika ingin dukungan Apple Silicon/ARM: build multi-platform (`docker buildx build --platform linux/amd64,linux/arm64 --push`).
 5. Uji bagian VPS/HTTPS/CI-CD Hari 7 dan Dockerfile Python/Spring Hari 6 di lingkungan sendiri sebelum mengandalkannya.
+
+## 9. Pembaruan 2026-10-30: Day 1–3
+
+- `hari-2/` dan `hari-3/` kini **diubah** atas permintaan pemilik (sebelumnya dilindungi): versi dasar, `package-lock.json`, tanpa password default, driver SQLAlchemy eksplisit, hardening image, README. Commit `abbfa6e`, di-push ke `main`.
+- Enam image dipublikasikan di Docker Hub (tag `1.0`, amd64): `docker-node-app`, `docker-python-app`, `docker-spring-app` (menimpa tag lama), `node-volume-demo`, `python-volume-demo`, `spring-volume-demo` (baru). Diverifikasi lewat API Hub, pull dari nol, dan menjalankan salah satunya.
+- Pengujian: build, jalan, CRUD, dan persistensi semua image Day 2–3: **PASS**; Trivy: 0 secret; temuan sisa dicatat di `hasil_audit.md` (di luar repo ini, di direktori kerja naskah).
+- Bagian "Day 2–3" pada laporan awal ("tidak diubah") sudah tidak berlaku.
